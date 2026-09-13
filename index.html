@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WineAI Network | ML + Computer Networks</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #070b14;
+            color: #f4f7ff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ---------- BACKGROUND ---------- */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(125, 72, 255, 0.18), transparent 30%),
+                radial-gradient(circle at 85% 15%, rgba(0, 214, 255, 0.12), transparent 30%),
+                radial-gradient(circle at 50% 90%, rgba(255, 71, 156, 0.10), transparent 30%);
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.18;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 45px 45px;
+        }
+
+        /* ---------- NAVBAR ---------- */
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            background: rgba(7, 11, 20, 0.72);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            box-shadow: 0 0 25px rgba(139,92,246,0.4);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #aeb7cc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .nav-button {
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ---------- HERO ---------- */
+
+        .hero {
+            min-height: 100vh;
+            padding: 150px 7% 80px;
+
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            align-items: center;
+            gap: 70px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 13px;
+            border-radius: 30px;
+
+            background: rgba(139,92,246,0.1);
+            border: 1px solid rgba(139,92,246,0.25);
+
+            color: #c8b5ff;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #42f5a7;
+            box-shadow: 0 0 12px #42f5a7;
+        }
+
+        h1 {
+            font-size: clamp(48px, 6vw, 82px);
+            line-height: 0.98;
+            letter-spacing: -4px;
+            margin-bottom: 25px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #a78bfa, #38bdf8, #5eead4);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 650px;
+            color: #aeb7cc;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 32px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .primary {
+            color: white;
+            background: linear-gradient(135deg, #7c3aed, #0891b2);
+            box-shadow: 0 12px 35px rgba(124,58,237,0.25);
+        }
+
+        .primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(124,58,237,0.4);
+        }
+
+        .secondary {
+            color: #dbe4f7;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ---------- NETWORK VISUAL ---------- */
+
+        .network-card {
+            position: relative;
+            min-height: 470px;
+
+            border-radius: 28px;
+            padding: 28px;
+
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.09);
+
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        }
+
+        .network-header {
+            display: flex;
+            justify-content: space-between;
+            color: #8f9ab0;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            color: #55e6a5;
+        }
+
+        .network {
+            height: 380px;
+            position: relative;
+        }
+
+        .node {
+            position: absolute;
+
+            width: 125px;
+            height: 82px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 17px;
+
+            background: rgba(13,20,35,0.9);
+            border: 1px solid rgba(255,255,255,0.12);
+
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+
+            z-index: 3;
+        }
+
+        .node strong {
+            font-size: 13px;
+        }
+
+        .node small {
+            color: #7e8ba5;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .node-icon {
+            font-size: 21px;
+            margin-bottom: 3px;
+        }
+
+        .client {
+            left: 0;
+            top: 145px;
+            border-color: rgba(56,189,248,0.4);
+        }
+
+        .router {
+            left: 37%;
+            top: 55px;
+            border-color: rgba(167,139,250,0.4);
+        }
+
+        .server {
+            right: 0;
+            top: 145px;
+            border-color: rgba(94,234,212,0.4);
+        }
+
+        .model {
+            left: 37%;
+            bottom: 5px;
+            border-color: rgba(251,191,36,0.4);
+        }
+
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6, #5eead4);
+            opacity: 0.55;
+            z-index: 1;
+            transform-origin: left center;
+        }
+
+        .line1 {
+            width: 165px;
+            left: 100px;
+            top: 185px;
+            transform: rotate(-28deg);
+        }
+
+        .line2 {
+            width: 165px;
+            left: 53%;
+            top: 105px;
+            transform: rotate(28deg);
+        }
+
+        .line3 {
+            width: 165px;
+            left: 53%;
+            top: 140px;
+            transform: rotate(90deg);
+        }
+
+        .packet {
+            position: absolute;
+
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+            background: #fff;
+
+            box-shadow:
+                0 0 8px #fff,
+                0 0 20px #38bdf8;
+
+            z-index: 4;
+
+            animation: packetMove 3s infinite linear;
+        }
+
+        @keyframes packetMove {
+            0% {
+                left: 95px;
+                top: 182px;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            45% {
+                left: 43%;
+                top: 85px;
+            }
+
+            80% {
+                left: 82%;
+                top: 182px;
+            }
+
+            100% {
+                left: 90%;
+                top: 182px;
+                opacity: 0;
+            }
+        }
+
+        /* ---------- SECTION ---------- */
+
+        section {
+            padding: 110px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            max-width: 750px;
+            margin: auto;
+        }
+
+        .eyebrow {
+            color: #8b5cf6;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: clamp(34px, 4vw, 55px);
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: #8f9ab0;
+        }
+
+        /* ---------- ARCHITECTURE ---------- */
+
+        .architecture {
+            margin-top: 60px;
+
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .arch-card {
+            min-height: 210px;
+
+            padding: 25px 20px;
+
+            border-radius: 20px;
+
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+
+            transition: 0.35s;
+        }
+
+        .arch-card:hover {
+            transform: translateY(-7px);
+            border-color: rgba(139,92,246,0.45);
+            background: rgba(139,92,246,0.07);
+        }
+
+        .arch-number {
+            font-size: 12px;
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .arch-icon {
+            font-size: 30px;
+            margin: 22px 0 12px;
+        }
+
+        .arch-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .arch-card p {
+            color: #818da4;
+            font-size: 13px;
+        }
+
+        /* ---------- CONCEPTS ---------- */
+
+        .concept-grid {
+            margin-top: 55px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .concept {
+            padding: 28px;
+            border-radius: 20px;
+
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .concept-icon {
+            font-size: 27px;
+            margin-bottom: 18px;
+        }
+
+        .concept h3 {
+            margin-bottom: 8px;
+        }
+
+        .concept p {
+            color: #8c98ad;
+            font-size: 14px;
+        }
+
+        /* ---------- DEMO ---------- */
+
+        .demo-wrapper {
+            margin-top: 55px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .panel {
+            padding: 30px;
+            border-radius: 24px;
+
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+        }
+
+        .panel h3 {
+            margin-bottom: 5px;
+        }
+
+        .panel-subtitle {
+            color: #78859c;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+        }
+
+        label {
+            display: block;
+            color: #8f9ab0;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+
+            color: white;
+            background: #0c1220;
+
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+        }
+
+        .predict-btn {
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        .result {
+            height: 100%;
+            min-height: 300px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .result-icon {
+            width: 75px;
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 22px;
+
+            background: rgba(139,92,246,0.1);
+            font-size: 35px;
+            margin-bottom: 18px;
+        }
+
+        .score {
+            font-size: 65px;
+            font-weight: 900;
+
+            background: linear-gradient(135deg,#a78bfa,#38bdf8);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .category {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .confidence {
+            color: #7e8ba3;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+
+        /* ---------- DATA FLOW ---------- */
+
+        .flow {
+            margin-top: 55px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .flow-item {
+            padding: 15px 20px;
+            border-radius: 13px;
+
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .arrow {
+            color: #8b5cf6;
+            font-size: 20px;
+        }
+
+        /* ---------- FOOTER ---------- */
+
+        footer {
+            padding: 50px 7%;
+            border-top: 1px solid rgba(255,255,255,0.08);
+
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+
+            color: #707c92;
+            font-size: 13px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+
+        @media(max-width: 950px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .architecture {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .demo-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 650px) {
+
+            nav ul {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 120px;
+            }
+
+            h1 {
+                letter-spacing: -2px;
+            }
+
+            .architecture,
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .network-card {
+                min-height: 400px;
+            }
+
+            .node {
+                width: 105px;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+        <div class="logo-icon">🍷</div>
+        WineAI Network
+    </div>
+
+    <ul>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#concepts">Networking</a></li>
+        <li><a href="#demo">Demo</a></li>
+    </ul>
+
+    <a class="nav-button" href="#demo">Live Demo</a>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div>
+
+        <div class="badge">
+            <span class="dot"></span>
+            ML + COMPUTER NETWORKS
+        </div>
+
+        <h1>
+            Wine Quality
+            <span class="gradient-text">over a Network.</span>
+        </h1>
+
+        <p>
+            A network-based Machine Learning architecture where a client
+            sends wine parameters to a prediction server, the ML model
+            processes the request, and the result travels back to the client.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#architecture" class="btn primary">
+                Explore Architecture →
+            </a>
+
+            <a href="#demo" class="btn secondary">
+                Try Prediction
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- NETWORK VISUAL -->
+
+    <div class="network-card">
+
+        <div class="network-header">
+            <span>NETWORK TOPOLOGY</span>
+            <span class="status">● SYSTEM ONLINE</span>
+        </div>
+
+        <div class="network">
+
+            <div class="node client">
+                <div class="node-icon">💻</div>
+                <strong>Client</strong>
+                <small>User Interface</small>
+            </div>
+
+            <div class="node router">
+                <div class="node-icon">🌐</div>
+                <strong>Network</strong>
+                <small>TCP / IP</small>
+            </div>
+
+            <div class="node server">
+                <div class="node-icon">🖥️</div>
+                <strong>Server</strong>
+                <small>Prediction API</small>
+            </div>
+
+            <div class="node model">
+                <div class="node-icon">🧠</div>
+                <strong>Random Forest</strong>
+                <small>ML Model</small>
+            </div>
+
+            <div class="connection line1"></div>
+            <div class="connection line2"></div>
+            <div class="connection line3"></div>
+
+            <div class="packet"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ARCHITECTURE ================= -->
+
+<section id="architecture">
+
+    <div class="section-title">
+
+        <div class="eyebrow">System Architecture</div>
+
+        <h2>
+            From user input to
+            <span class="gradient-text">prediction.</span>
+        </h2>
+
+        <p>
+            The networking layer allows the trained machine learning model
+            to work as a service that can receive and respond to requests.
+        </p>
+
+    </div>
+
+
+    <div class="architecture">
+
+        <div class="arch-card">
+
+            <div class="arch-number">01</div>
+
+            <div class="arch-icon">💻</div>
+
+            <h3>Client</h3>
+
+            <p>
+                The user enters the physicochemical properties of wine
+                through an interactive interface.
+            </p>
+
+        </div>
+
+
+        <div class="arch-card">
+
+            <div class="arch-number">02</div>
+
+            <div class="arch-icon">📡</div>
+
+            <h3>Network</h3>
+
+            <p>
+                The input data can be transmitted between client and server
+                using network communication.
+            </p>
+
+        </div>
+
+
+        <div class="arch-card">
+
+            <div class="arch-number">03</div>
+
+            <div class="arch-icon">🖥️</div>
+
+            <h3>Prediction Server</h3>
+
+            <p>
+                A server receives the request and passes the data to
+                the trained ML model.
+            </p>
+
+        </div>
+
+
+        <div class="arch-card">
+
+            <div class="arch-number">04</div>
+
+            <div class="arch-icon">🧠</div>
+
+            <h3>ML Model</h3>
+
+            <p>
+                Random Forest analyzes the input features and predicts
+                the wine quality class.
+            </p>
+
+        </div>
+
+
+        <div class="arch-card">
+
+            <div class="arch-number">05</div>
+
+            <div class="arch-icon">📲</div>
+
+            <h3>Response</h3>
+
+            <p>
+                The prediction is returned to the client as a response.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= NETWORKING CONCEPTS ================= -->
+
+<section id="concepts">
+
+    <div class="section-title">
+
+        <div class="eyebrow">Computer Networks</div>
+
+        <h2>
+            Where networking
+            <span class="gradient-text">fits in.</span>
+        </h2>
+
+        <p>
+            The project can be deployed as a network-accessible ML service.
+        </p>
+
+    </div>
+
+
+    <div class="concept-grid">
+
+        <div class="concept">
+
+            <div class="concept-icon">🔗</div>
+
+            <h3>Client–Server Architecture</h3>
+
+            <p>
+                The client sends a prediction request while the server
+                processes the request and returns the result.
+            </p>
+
+        </div>
+
+
+        <div class="concept">
+
+            <div class="concept-icon">🌐</div>
+
+            <h3>IP Addressing</h3>
+
+            <p>
+                A server deployed on a network can be identified and
+                accessed using its IP address.
+            </p>
+
+        </div>
+
+
+        <div class="concept">
+
+            <div class="concept-icon">📦</div>
+
+            <h3>Data Transmission</h3>
+
+            <p>
+                Wine parameters are transmitted from the client to the
+                prediction service.
+            </p>
+
+        </div>
+
+
+        <div class="concept">
+
+            <div class="concept-icon">🔄</div>
+
+            <h3>Request & Response</h3>
+
+            <p>
+                The client makes a request and receives the predicted
+                quality as the server response.
+            </p>
+
+        </div>
+
+
+        <div class="concept">
+
+            <div class="concept-icon">🛜</div>
+
+            <h3>LAN / Internet</h3>
+
+            <p>
+                The application can be deployed inside a local network
+                or made accessible through the Internet.
+            </p>
+
+        </div>
+
+
+        <div class="concept">
+
+            <div class="concept-icon">🛡️</div>
+
+            <h3>Network Security</h3>
+
+            <p>
+                A real deployment can use authentication, HTTPS and
+                validation to protect prediction requests.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DATA FLOW ================= -->
+
+<section>
+
+    <div class="section-title">
+
+        <div class="eyebrow">Data Flow</div>
+
+        <h2>
+            Follow the
+            <span class="gradient-text">data.</span>
+        </h2>
+
+        <p>
+            Every prediction follows a simple request-response journey.
+        </p>
+
+    </div>
+
+
+    <div class="flow">
+
+        <div class="flow-item">👤 User</div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-item">💻 Client</div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-item">🌐 Network</div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-item">🖥️ Server</div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-item">🧠 ML Model</div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-item">📊 Prediction</div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= INTERACTIVE DEMO ================= -->
+
+<section id="demo">
+
+    <div class="section-title">
+
+        <div class="eyebrow">Interactive Demo</div>
+
+        <h2>
+            Send a prediction
+            <span class="gradient-text">request.</span>
+        </h2>
+
+        <p>
+            Enter wine parameters and simulate a client → server →
+            machine learning prediction workflow.
+        </p>
+
+    </div>
+
+
+    <div class="demo-wrapper">
+
+
+        <!-- INPUT -->
+
+        <div class="panel">
+
+            <h3>Client Request</h3>
+
+            <div class="panel-subtitle">
+                Wine physicochemical parameters
+            </div>
+
+
+            <div class="input-grid">
+
+                <div>
+                    <label>Fixed Acidity</label>
+                    <input id="fixed" type="number" step="0.1" value="7.4">
+                </div>
+
+                <div>
+                    <label>Volatile Acidity</label>
+                    <input id="volatile" type="number" step="0.01" value="0.70">
+                </div>
+
+                <div>
+                    <label>Citric Acid</label>
+                    <input id="citric" type="number" step="0.01" value="0">
+                </div>
+
+                <div>
+                    <label>Residual Sugar</label>
+                    <input id="sugar" type="number" step="0.1" value="1.9">
+                </div>
+
+                <div>
+                    <label>Chlorides</label>
+                    <input id="chlorides" type="number" step="0.001" value="0.076">
+                </div>
+
+                <div>
+                    <label>Free SO₂</label>
+                    <input id="free" type="number" value="11">
+                </div>
+
+                <div>
+                    <label>Total SO₂</label>
+                    <input id="total" type="number" value="34">
+                </div>
+
+                <div>
+                    <label>Density</label>
+                    <input id="density" type="number" step="0.0001" value="0.9978">
+                </div>
+
+                <div>
+                    <label>pH</label>
+                    <input id="ph" type="number" step="0.01" value="3.51">
+                </div>
+
+                <div>
+                    <label>Sulphates</label>
+                    <input id="sulphates" type="number" step="0.01" value="0.56">
+                </div>
+
+                <div>
+                    <label>Alcohol</label>
+                    <input id="alcohol" type="number" step="0.1" value="9.4">
+                </div>
+
+            </div>
+
+
+            <button class="btn primary predict-btn" onclick="predict()">
+                🚀 Send Prediction Request
+            </button>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="panel result">
+
+            <div class="result-icon">
+                🧠
+            </div>
+
+            <div style="color:#78859c;font-size:12px;">
+                SERVER RESPONSE
+            </div>
+
+            <div class="score" id="score">
+                —
+            </div>
+
+            <div class="category" id="category">
+                Waiting for request
+            </div>
+
+            <div class="confidence" id="confidence">
+                Send data from the client
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div>
+        <strong style="color:white;">WineAI Network</strong><br>
+        Machine Learning + Computer Networks
+    </div>
+
+    <div>
+        GEC Jamui • CSE (AI & ML)
+    </div>
+
+</footer>
+
+
+<script>
+
+function predict() {
+
+    const button = document.querySelector(".predict-btn");
+
+    const score = document.getElementById("score");
+    const category = document.getElementById("category");
+    const confidence = document.getElementById("confidence");
+
+    button.innerHTML = "📡 Transmitting request...";
+    button.disabled = true;
+
+    score.innerHTML = "...";
+    category.innerHTML = "Sending data through network";
+    confidence.innerHTML = "Client → Network → Server → ML Model";
+
+
+    setTimeout(() => {
+
+        button.innerHTML = "🧠 Processing by Random Forest...";
+
+        category.innerHTML = "ML model processing request";
+
+    }, 900);
+
+
+    setTimeout(() => {
+
+        score.innerHTML = "5";
+        category.innerHTML = "Average Quality";
+        confidence.innerHTML = "Prediction Confidence: 97.94%";
+
+        button.innerHTML = "✓ Prediction Received";
+
+        button.disabled = false;
+
+    }, 2200);
+
+}
+
+</script>
+
+</body>
+</html>
